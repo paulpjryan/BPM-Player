@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             TODO: fix play/pause button when returning to activity from notification (bug)
             TODO: Add BPM functionality (feature)
             TODO: Style controller and list (feature)
+            TODO: Add sort selector
         */
     //endregion
 
