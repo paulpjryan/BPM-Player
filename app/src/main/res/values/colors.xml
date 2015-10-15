@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <drawable name="non_selected_color">#FFFFFFFF</drawable>
-    <drawable name="selected_color">#33333333</drawable>
+    <drawable name="selected_color">#DDDDDDDD</drawable>
 </resources>

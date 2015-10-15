@@ -19,7 +19,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="275d8e78-dd67-4faa-9005-f7bd31e2da07" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/paulpjryan/bpmplayer/MusicService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/paulpjryan/bpmplayer/MusicService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/song.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/song.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="BPM Player.iws" />
@@ -93,10 +94,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MusicService.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="MusicService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/paulpjryan/bpmplayer/MusicService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.063716814" vertical-offset="781" max-vertical-offset="4161">
+            <state vertical-scroll-proportion="0.0" vertical-offset="781" max-vertical-offset="4161">
               <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -141,11 +142,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="song.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="song.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/song.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.9310346" vertical-offset="0" max-vertical-offset="551">
-              <caret line="6" column="32" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.744403" vertical-offset="0" max-vertical-offset="551">
+              <caret line="21" column="30" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -741,12 +742,12 @@
         <option value="$PROJECT_DIR$/app/src/main/res/color/list_selector.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/not_selected.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/selected.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/song.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/list_selector.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/paulpjryan/bpmplayer/SongAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/paulpjryan/bpmplayer/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/paulpjryan/bpmplayer/MusicService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/song.xml" />
       </list>
     </option>
   </component>
@@ -1141,7 +1142,11 @@
       <created>1444886049686</created>
       <updated>1444886049686</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Handle loss and gain of audio focus">
+      <created>1444919274084</created>
+      <updated>1444919274084</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1230,7 +1235,8 @@
     <MESSAGE value="Add MediaController&#10;Add selection indicator to adapter&#10;" />
     <MESSAGE value="Delete unneeded TODOs" />
     <MESSAGE value="Add new requirements to notes section" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add new requirements to notes section" />
+    <MESSAGE value="Handle loss and gain of audio focus" />
+    <option name="LAST_COMMIT_MESSAGE" value="Handle loss and gain of audio focus" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1406,29 +1412,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/song.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.9310346" vertical-offset="0" max-vertical-offset="551">
-          <caret line="6" column="32" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/list_selector.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="190">
           <caret line="3" column="56" selection-start-line="3" selection-start-column="56" selection-end-line="3" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="190">
-          <caret line="3" column="45" selection-start-line="3" selection-start-column="45" selection-end-line="3" selection-end-column="45" />
           <folding />
         </state>
       </provider>
@@ -1481,7 +1468,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/paulpjryan/bpmplayer/MusicService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.063716814" vertical-offset="781" max-vertical-offset="4161">
+        <state vertical-scroll-proportion="0.0" vertical-offset="781" max-vertical-offset="4161">
           <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1509,6 +1496,25 @@
             <element signature="e#5407#5408#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="190">
+          <caret line="3" column="45" selection-start-line="3" selection-start-column="45" selection-end-line="3" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/song.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.744403" vertical-offset="0" max-vertical-offset="551">
+          <caret line="21" column="30" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
   </component>
