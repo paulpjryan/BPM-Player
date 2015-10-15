@@ -30,8 +30,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             TODO: fix play/pause button when returning to activity from notification (bug)
             TODO: Add BPM functionality (feature)
             TODO: Style controller and list (feature)
-            TODO: Indicate playing song (feature)
-         */
+        */
     //endregion
 
     private RecyclerView songView;
@@ -151,9 +150,9 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
         if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.action_stopmusic) {
+            //FOR DEBUGGING ONLY
             stopService(playIntent);
             musicService = null;
-            // TODO: make this not exit the app. Add regular music controls.
             System.exit(0);
         }
 
