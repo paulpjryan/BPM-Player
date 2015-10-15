@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -18,7 +19,8 @@ import android.widget.MediaController;
 import java.util.ArrayList;
 
 public class MusicService extends Service implements
-    MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
+    MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+    MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
     private MediaPlayer player;     //media player
     private ArrayList<Song> songs;  //songs
@@ -30,6 +32,7 @@ public class MusicService extends Service implements
     private final IBinder musicBind = new MusicBinder();
 
     private MediaController controller;
+    AudioManager am;
 
     public MusicService() {
         //onCreate();
@@ -38,9 +41,15 @@ public class MusicService extends Service implements
     @Override
     public void onCreate() {
         super.onCreate();
-        songPos = 0;
-        player = new MediaPlayer();
-        initMusicPlayer();
+
+        am = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        int result = am.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+        if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            songPos = 0;
+            player = new MediaPlayer();
+            initMusicPlayer();
+        }
     }
 
     @Override
@@ -61,6 +70,22 @@ public class MusicService extends Service implements
 
     public void setList(ArrayList<Song> aSongs) {
         songs = aSongs;
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+            // Pause playback
+            pausePlayer();
+        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+            // Resume playback
+            play();
+        } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            //am.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
+            am.abandonAudioFocus(this);
+            // Stop playback
+            pausePlayer();
+        }
     }
 
     public class MusicBinder extends Binder {
