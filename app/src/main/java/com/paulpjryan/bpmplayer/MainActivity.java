@@ -17,7 +17,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.MediaController;
+
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.Mp3File;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +48,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
     private MusicController controller;
 
     private boolean paused = false, playbackPaused = false;
+    SongAdapter mSongAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             }
         });
 
-        SongAdapter mSongAdapter = new SongAdapter(songList.toArray(new Song[songList.size()]), this);
+        mSongAdapter = new SongAdapter(songList.toArray(new Song[songList.size()]), this);
         songView.setAdapter(mSongAdapter);
 
         setupController();
@@ -165,9 +170,15 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        String selectionMimeType = MediaStore.Files.FileColumns.MIME_TYPE + "=?";
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + selectionMimeType;
+        String sortOrder = null;
+        String[] projection = null;
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("mp3");
+        String[] selectionArgsMp3 = new String[] { mimeType };
 
-        Cursor musicCursor = musicResolver.query(musicUri, null, selection, null, null);
+
+        Cursor musicCursor = musicResolver.query(musicUri, projection, selection, selectionArgsMp3, sortOrder);
 
         if(musicCursor != null && musicCursor.moveToFirst()) {
             int idColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID);
@@ -178,11 +189,32 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
                 long id = musicCursor.getLong(idColumn);
                 String title = musicCursor.getString(titleColumn);
                 String artist = musicCursor.getString(artistColumn);
+
+                //bpm processing
+               // int bpm = getBpmFromId(id);
+
                 songList.add(new Song(id, title, artist));
             } while (musicCursor.moveToNext());
         }
         if(musicCursor != null)
             musicCursor.close();
+    }
+
+    public int getBpmFromId(long id) {
+        int bpm = -1;
+        Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
+        try {
+            Mp3File file = new Mp3File(getRealPathFromURI(getApplicationContext(), uri));
+            if(file.hasId3v2Tag()) {
+                ID3v2 id3v2Tag = file.getId3v2Tag();
+                bpm = id3v2Tag.getBPM();
+                Log.d("MP3AGIC", "Got BPM for track: " + id + ": " + bpm);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bpm;
     }
 
     public void songPicked(View view) {
@@ -206,6 +238,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             playbackPaused = false;
         }
 
+        mSongAdapter.selectNext();
         //controller.show(0);
     }
 
@@ -217,6 +250,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             playbackPaused = false;
         }
 
+        mSongAdapter.selectPrev();
         //controller.show(0);
     }
 
@@ -307,5 +341,20 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
         controller.setMediaPlayer(this);
         controller.setAnchorView(findViewById(R.id.song_list));
         controller.setEnabled(true);
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }

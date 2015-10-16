@@ -2,6 +2,7 @@ package com.paulpjryan.bpmplayer;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     private Song[] mDataset;
-    private int selectedItem = 0;
+    private int selectedItem = -1;
     private Context mContext;
 
     // Provide a reference to the views for each data item
@@ -43,6 +44,34 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     public SongAdapter(Song[] myDataset, Context context) {
         mDataset = myDataset;
         mContext = context;
+    }
+
+    public void selectNext() {
+        //Log.d("SelectAdapter", "Selecting next");
+        notifyItemChanged(selectedItem);
+        if(selectedItem < mDataset.length - 1) {
+            selectedItem++;
+            //Log.d("SelectAdapter", "New Item: " + selectedItem);
+        }
+        else {
+            selectedItem = 0;
+            //Log.d("SelectAdapter", "New Item: " + selectedItem);
+        }
+        notifyItemChanged(selectedItem);
+    }
+
+    public void selectPrev() {
+        //Log.d("SelectAdapter", "Selecting prev");
+        notifyItemChanged(selectedItem);
+        if(selectedItem > 0) {
+            selectedItem--;
+            //Log.d("SelectAdapter", "New Item: " + selectedItem);
+        }
+        else {
+            selectedItem = mDataset.length - 1;
+            //Log.d("SelectAdapter", "New Item: " + selectedItem);
+        }
+        notifyItemChanged(selectedItem);
     }
 
     // Create new views (invoked by the layout manager)
