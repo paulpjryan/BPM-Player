@@ -32,9 +32,11 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
     //region notes
         /*
             TODO: fix play/pause button when returning to activity from notification (bug)
-            TODO: Add BPM functionality (feature)
+            TODO: speed up BPM functionality (bug)
+                AsyncTask for BPM calculation
+                Sort by BPM available after all songs have been processed
             TODO: Style controller and list (feature)
-            TODO: Add sort selector
+            TODO: Add sort selector (feature)
         */
     //endregion
 
@@ -191,9 +193,9 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
                 String artist = musicCursor.getString(artistColumn);
 
                 //bpm processing
-               // int bpm = getBpmFromId(id);
+                //int bpm = getBpmFromId(id);
 
-                songList.add(new Song(id, title, artist));
+                songList.add(new Song(id, title, artist/*, bpm*/));
             } while (musicCursor.moveToNext());
         }
         if(musicCursor != null)
