@@ -43,8 +43,10 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
                 AsyncTask for BPM calculation
                 Cache BPMs (done)
                 Sort by BPM available after all songs have been processed
+                    Done by default
             TODO: Style controller and list (feature)
-            TODO: Add sort selector (feature)
+            TODO: Add sort selector
+            TODO: implement filters (feature)
         */
     //endregion
 

@@ -9,41 +9,48 @@
     <!--android:background="@drawable/list_selector">-->
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp"
-        android:duplicateParentState="true">
+        android:duplicateParentState="true"
+        android:layout_weight="5">
         <TextView
             android:id="@+id/song_title"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/text_selector"
             android:text="Song Title"
+            android:minLines="1"
+            android:maxLines="1"
             android:ellipsize="marquee"
             android:duplicateParentState="true"/>
 
         <TextView
             android:id="@+id/song_artist"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:duplicateParentState="true"
             android:textColor="@color/text_selector"
+            android:minLines="1"
+            android:maxLines="1"
             android:ellipsize="marquee"
             android:text="Artist"/>
     </LinearLayout>
 
     <TextView
         android:id="@+id/song_bpm"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:textStyle="bold"
         android:textSize="16sp"
         android:paddingRight="10dp"
         android:duplicateParentState="true"
         android:textColor="@color/text_selector"
-        android:gravity="right|center_vertical" />
+        android:gravity="right|center_vertical"
+        android:layout_weight="1"
+        android:text="100"/>
 </LinearLayout>
