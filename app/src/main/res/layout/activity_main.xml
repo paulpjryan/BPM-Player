@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:gravity="center"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:gravity="center">
+        <!--android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"> -->
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,7 +25,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:autoText="false"
             android:hint="0" />
 
         <TextView
@@ -38,7 +37,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:autoText="false"
             android:hint="0" />
 
     </LinearLayout>

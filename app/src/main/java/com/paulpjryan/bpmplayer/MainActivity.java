@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
             TODO: implement filters (feature)
             TODO: fix MediaController-keyboard conflict
                 Cant open keyboard while MediaController is shown
+            TODO: fix music restarting on notification if has audio focus even if paused
+                Maybe maintain state wasPaused, wasPlaying?
         */
     //endregion
 
@@ -268,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
             int idColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID);
             int titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int artistColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+            int dataColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DATA); //TODO: see if parsing this can get bpm faster
 
             do {
                 long id = musicCursor.getLong(idColumn);
