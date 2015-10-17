@@ -11,20 +11,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.MediaController;
-import android.widget.TextView;
 
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
@@ -34,7 +32,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
-public class MainActivity extends ActionBarActivity implements MediaController.MediaPlayerControl {
+public class MainActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
 
     //region notes
         /*
@@ -316,7 +314,8 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
         SharedPreferences sp = getApplicationContext().getSharedPreferences(getString(R.string.bpm_sharedprefskey), Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putInt("" + id, bpm);
-        ed.commit();
+        //ed.commit();
+        ed.apply();
 
         Log.d("SavetoSharedPrefs", "Saved bpm of " + bpm + " for id " + id);
     }
@@ -349,7 +348,8 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
         SharedPreferences sp = getApplicationContext().getSharedPreferences(getString(R.string.bpm_sharedprefskey), Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.clear();
-        ed.commit();
+        //ed.commit();
+        ed.apply();
     }
 
     public void songPicked(View view) {
@@ -424,10 +424,12 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
 
     @Override
     public boolean isPlaying() {
-        if(musicService != null && musicBound && musicService.isPlaying()) {
+        /*if(musicService != null && musicBound && musicService.isPlaying()) {
             return musicService.isPlaying();
         }
-        return false;
+        return false; */
+
+        return (musicService != null && musicBound && musicService.isPlaying());
     }
 
     @Override
