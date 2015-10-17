@@ -118,16 +118,19 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             public int compare(Song a, Song b) {
                 // a > b, return +
                 // b > a, return -
-                // a = b, return 0
+                // a = b, return comparison of artists
                 if(a.getBpm() < 0 && b.getBpm() < 0) {
                     //return equal
-                    return 0;
+                    //return 0;
+                    return a.getArtist().compareTo(b.getArtist());
                 } else if(a.getBpm() < 0) {
                     //return b
                     return 1;
                 } else if(b.getBpm() < 0) {
                     //return a
                     return -1;
+                } else if(a.getBpm() == b.getBpm()) {
+                    return a.getArtist().compareTo(b.getArtist());
                 }
                 return a.getBpm() - b.getBpm();
             }
