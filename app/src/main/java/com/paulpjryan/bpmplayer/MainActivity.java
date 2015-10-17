@@ -14,12 +14,17 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.EditText;
 import android.widget.MediaController;
+import android.widget.TextView;
 
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
@@ -62,6 +67,36 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
 
         songView = (RecyclerView)findViewById(R.id.song_list);
         songList = new ArrayList<>();
+
+        //EditTexts for BPM filter
+        EditText et_filter_low = (EditText)findViewById(R.id.filter_low);
+        EditText et_filter_high = (EditText)findViewById(R.id.filter_high);
+
+        et_filter_low.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Change low limit of filter
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        et_filter_high.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Change high limit of filter
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
