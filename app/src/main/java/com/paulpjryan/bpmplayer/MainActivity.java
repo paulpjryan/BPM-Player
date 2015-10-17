@@ -83,6 +83,11 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //Change low limit of filter
+                int lowLim = -2;
+                if(count > 0) {
+                    lowLim = Integer.parseInt(s.toString());
+                }
+                mSongAdapter.setLowLim(lowLim);
             }
 
             @Override
@@ -96,6 +101,11 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //Change high limit of filter
+                int highLim = 999;
+                if(count > 0) {
+                    highLim = Integer.parseInt(s.toString());
+                }
+                mSongAdapter.setHighLim(highLim);
             }
 
             @Override
@@ -140,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             }
         });
 
-        mSongAdapter = new SongAdapter(songList.toArray(new Song[songList.size()]), this);
+        mSongAdapter = new SongAdapter(songList, this);
         songView.setAdapter(mSongAdapter);
 
         setupController();
