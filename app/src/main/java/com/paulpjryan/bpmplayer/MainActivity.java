@@ -47,6 +47,8 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             TODO: Style controller and list (feature)
             TODO: Add sort selector
             TODO: implement filters (feature)
+            TODO: fix MediaController-keyboard conflict
+                Cant open keyboard while MediaController is shown
         */
     //endregion
 
