@@ -2,4 +2,6 @@
 <resources>
     <drawable name="non_selected_color">#FFFFFFFF</drawable>
     <drawable name="selected_color">#DDDDDDDD</drawable>
+    <color name="selected_text_color">#00000000</color>
+    <color name="regular_text_color">#22222222</color>
 </resources>

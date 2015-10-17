@@ -20,6 +20,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         // each data item is just a string in this case
         TextView titleView;
         TextView artistView;
+        TextView bpmView;
         public ViewHolder(View v) {
             super(v);
 
@@ -29,14 +30,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                     notifyItemChanged(selectedItem);
                     selectedItem = getLayoutPosition();
                     notifyItemChanged(selectedItem);
-                    if(mContext instanceof MainActivity) {
-                        ((MainActivity)mContext).songPicked(view);
+                    if (mContext instanceof MainActivity) {
+                        ((MainActivity) mContext).songPicked(view);
                     }
                 }
             });
 
             titleView = (TextView)v.findViewById(R.id.song_title);
             artistView = (TextView)v.findViewById(R.id.song_artist);
+            bpmView = (TextView)v.findViewById(R.id.song_bpm);
         }
     }
 
@@ -94,6 +96,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         // - replace the contents of the view with that element
         holder.titleView.setText(mDataset[position].getTitle());
         holder.artistView.setText(mDataset[position].getArtist());
+        if(mDataset[position].getBpm() > 0) {
+            holder.bpmView.setText("" + mDataset[position].getBpm());
+        } else
+            holder.bpmView.setText("");
 
     }
 

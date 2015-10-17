@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.mpatric.mp3agic.Mp3File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
 
 public class MainActivity extends ActionBarActivity implements MediaController.MediaPlayerControl {
 
@@ -34,6 +36,7 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             TODO: fix play/pause button when returning to activity from notification (bug)
             TODO: speed up BPM functionality (bug)
                 AsyncTask for BPM calculation
+                Cache BPMs (done)
                 Sort by BPM available after all songs have been processed
             TODO: Style controller and list (feature)
             TODO: Add sort selector (feature)
@@ -65,12 +68,33 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
         songView.setLayoutManager(layoutManager);
 
         getSongList();
-        Log.d("Song_List", "Got " + songList.size() + " songs");
+        //Log.d("Song_List", "Got " + songList.size() + " songs");
+
+        /*Collections.sort(songList, new Comparator<Song>() {
+            @Override
+            public int compare(Song a, Song b) {
+                return a.getTitle().compareTo(b.getTitle());
+            }
+        });
+        */
 
         Collections.sort(songList, new Comparator<Song>() {
             @Override
             public int compare(Song a, Song b) {
-                return a.getTitle().compareTo(b.getTitle());
+                // a > b, return +
+                // b > a, return -
+                // a = b, return 0
+                if(a.getBpm() < 0 && b.getBpm() < 0) {
+                    //return equal
+                    return 0;
+                } else if(a.getBpm() < 0) {
+                    //return b
+                    return 1;
+                } else if(b.getBpm() < 0) {
+                    //return a
+                    return -1;
+                }
+                return a.getBpm() - b.getBpm();
             }
         });
 
@@ -154,14 +178,22 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if(id == R.id.action_stopmusic) {
-            //FOR DEBUGGING ONLY
-            stopService(playIntent);
-            musicService = null;
-            System.exit(0);
+        switch(id) {
+            case R.id.action_settings:
+                return true;
+                 //break;
+            case R.id.action_stopmusic:
+                //FOR DEBUGGING ONLY
+                stopService(playIntent);
+                musicService = null;
+                System.exit(0);
+                break;
+            case R.id.action_cleardb:
+                clearSavedBpms();
+                break;
+            case R.id.log_sharedPrefs:
+                logSharedPrefs();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -193,21 +225,21 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
                 String artist = musicCursor.getString(artistColumn);
 
                 //bpm processing
-                //int bpm = getBpmFromId(id);
+                int bpm = getBpm(id);
 
-                songList.add(new Song(id, title, artist/*, bpm*/));
+                songList.add(new Song(id, title, artist, bpm));
             } while (musicCursor.moveToNext());
         }
         if(musicCursor != null)
             musicCursor.close();
     }
 
-    public int getBpmFromId(long id) {
+    private int getBpmFromFile(long id) {
         int bpm = -1;
         Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
         try {
             Mp3File file = new Mp3File(getRealPathFromURI(getApplicationContext(), uri));
-            if(file.hasId3v2Tag()) {
+            if (file.hasId3v2Tag()) {
                 ID3v2 id3v2Tag = file.getId3v2Tag();
                 bpm = id3v2Tag.getBPM();
                 Log.d("MP3AGIC", "Got BPM for track: " + id + ": " + bpm);
@@ -217,6 +249,55 @@ public class MainActivity extends ActionBarActivity implements MediaController.M
             e.printStackTrace();
         }
         return bpm;
+    }
+
+    private int getBpmFromSharedPrefs(long id) {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences(getString(R.string.bpm_sharedprefskey), Context.MODE_PRIVATE);
+        int bpm = sp.getInt("" + id, -2);
+
+        Log.d("getBpmFromSharedPrefs", "Got BPM of " + bpm + " for id " + id);
+
+        return bpm;
+    }
+
+    private void saveBpmToSharedPrefs(long id, int bpm) {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences(getString(R.string.bpm_sharedprefskey), Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putInt("" + id, bpm);
+        ed.commit();
+
+        Log.d("SavetoSharedPrefs", "Saved bpm of " + bpm + " for id " + id);
+    }
+
+    public int getBpm(long id) {
+        int bpm = getBpmFromSharedPrefs(id);
+
+        //Not in sharedprefs
+        if(bpm < -1) {
+            Log.d("getBPM", "Bpm not in sharedPrefs");
+            bpm = getBpmFromFile(id);
+            saveBpmToSharedPrefs(id, bpm);
+        } else
+            Log.d("getBPM", "Bpm in sharedPrefs");
+
+        return bpm;
+    }
+
+    public void logSharedPrefs() {
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.bpm_sharedprefskey), Context.MODE_PRIVATE);
+        Map<String,?> keys = prefs.getAll();
+
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            Log.d("map values",entry.getKey() + ": " +
+                    entry.getValue().toString());
+        }
+    }
+
+    private void clearSavedBpms() {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences(getString(R.string.bpm_sharedprefskey), Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.clear();
+        ed.commit();
     }
 
     public void songPicked(View view) {

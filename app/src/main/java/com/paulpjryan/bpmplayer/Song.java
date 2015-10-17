@@ -13,6 +13,7 @@ public class Song {
         this.id=id;
         this.title=title;
         this.artist=artist;
+        this.bpm = -1;
     }
 
     public Song(long id, String title, String artist, int bpm) {
