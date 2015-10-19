@@ -381,14 +381,16 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     }
 
     public void playPrev() {
-        musicService.playPrev();
+        boolean posChanged = musicService.playPrev();
 
         if(playbackPaused) {
             setupController();
             playbackPaused = false;
         }
 
-        mSongAdapter.selectPrev();
+        if(posChanged) {
+            mSongAdapter.selectPrev();
+        }
         //controller.show(0);
     }
 

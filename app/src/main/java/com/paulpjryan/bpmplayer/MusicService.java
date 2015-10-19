@@ -148,7 +148,9 @@ public class MusicService extends Service implements
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         mediaPlayer.start();
-        controller.show(0);
+
+        //if(!controller.isShowing())
+            controller.show(0);
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -195,12 +197,18 @@ public class MusicService extends Service implements
         player.start();
     }
 
-    public void playPrev() {
-        songPos--;
-        if(songPos < 0) {
-            songPos = songs.size()-1;
+    public boolean playPrev() {
+        //Log.d("MusicService", "Position = " + getPosition() + " checking against " + "5000");
+        boolean ret = false;
+        if(getPosition() < 3000) {
+            songPos--;
+            if (songPos < 0) {
+                songPos = songs.size() - 1;
+            }
+            ret = true;
         }
         playSong();
+        return ret;
     }
 
     public void playNext() {
