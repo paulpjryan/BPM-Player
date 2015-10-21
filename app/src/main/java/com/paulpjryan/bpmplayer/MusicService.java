@@ -25,6 +25,7 @@ public class MusicService extends Service implements
     private MediaPlayer player;     //media player
     private ArrayList<Song> songs;  //songs
     private int songPos;            //current song position
+    boolean wasPlaying = false;     //was music playing when audio focus was lost?
 
     private String songTitle = "";
     private static final int NOTIFY_ID = 1;
@@ -75,15 +76,17 @@ public class MusicService extends Service implements
     @Override
     public void onAudioFocusChange(int focusChange) {
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-            // Pause playback
+            // Pause playback, will resume when regains
             pausePlayer();
         } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
             // Resume playback
-            play();
+            if(wasPlaying)
+                play();
         } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
             //am.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
             am.abandonAudioFocus(this);
-            // Stop playback
+            // Stop playback, will not resume when regains
+            wasPlaying = false;
             pausePlayer();
         }
     }
@@ -111,6 +114,7 @@ public class MusicService extends Service implements
         }
 
         player.prepareAsync();
+        wasPlaying = true;
     }
 
     public void setSong(int songIndex) {
@@ -187,6 +191,11 @@ public class MusicService extends Service implements
 
     public void pausePlayer() {
         player.pause();
+    }
+
+    public void controlledPause() {
+        wasPlaying = false;
+        pausePlayer();
     }
 
     public void seek(int pos) {

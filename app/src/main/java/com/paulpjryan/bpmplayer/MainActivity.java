@@ -403,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     @Override
     public void pause() {
         playbackPaused = true;
-        musicService.pausePlayer();
+        musicService.controlledPause();
     }
 
     @Override
