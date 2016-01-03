@@ -1,51 +1,78 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- Layout to filter by BPM -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:gravity="center">
-        <!--android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"> -->
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/main_layout"
+        android:visibility="invisible">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Layout to filter by BPM -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Filter by BPM: "/>
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:gravity="center">
+            <!--android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"> -->
 
-        <EditText
-            android:id="@+id/filter_low"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter by BPM: "/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="to"/>
+            <EditText
+                android:id="@+id/filter_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="0" />
 
-        <EditText
-            android:id="@+id/filter_high"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="to"/>
 
+            <EditText
+                android:id="@+id/filter_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="0" />
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/song_list"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/song_list"
-        android:scrollbars="vertical"
+    <RelativeLayout
+        android:id="@+id/loading_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:id="@+id/pbar"
+            android:layout_centerInParent="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
+            android:text="Loading Songs... This may take a while on large libraries"
+            android:layout_below="@+id/pbar"/>
+    </RelativeLayout>
+</RelativeLayout>

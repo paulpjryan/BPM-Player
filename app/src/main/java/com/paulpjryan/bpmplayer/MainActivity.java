@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
@@ -22,7 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
     private RecyclerView songView;
     private ArrayList<Song> songList;
+    private RelativeLayout loadingView;
+    private LinearLayout mainLayout;
 
     private MusicService musicService;
     private Intent playIntent;
@@ -69,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadingView = (RelativeLayout)findViewById(R.id.loading_view);
+        mainLayout = (LinearLayout)findViewById(R.id.main_layout);
         songView = (RecyclerView)findViewById(R.id.song_list);
         songList = new ArrayList<>();
 
@@ -96,27 +103,31 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
         et_filter_high.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //Change high limit of filter
                 int highLim = 999;
-                if(count > 0) {
+                if (count > 0) {
                     highLim = Integer.parseInt(s.toString());
                 }
                 mSongAdapter.setHighLim(highLim);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         songView.setLayoutManager(layoutManager);
 
-        getSongList();
+        //getSongList();
+        new LoadSongsTask().execute();
+
         //Log.d("Song_List", "Got " + songList.size() + " songs");
 
         /*Collections.sort(songList, new Comparator<Song>() {
@@ -127,31 +138,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         });
         */
 
-        Collections.sort(songList, new Comparator<Song>() {
-            @Override
-            public int compare(Song a, Song b) {
-                // a > b, return +
-                // b > a, return -
-                // a = b, return comparison of artists
-                if(a.getBpm() < 0 && b.getBpm() < 0) {
-                    //return equal
-                    //return 0;
-                    return a.getArtist().compareTo(b.getArtist());
-                } else if(a.getBpm() < 0) {
-                    //return b
-                    return 1;
-                } else if(b.getBpm() < 0) {
-                    //return a
-                    return -1;
-                } else if(a.getBpm() == b.getBpm()) {
-                    return a.getArtist().compareTo(b.getArtist());
-                }
-                return a.getBpm() - b.getBpm();
-            }
-        });
 
-        mSongAdapter = new SongAdapter(songList, this);
-        songView.setAdapter(mSongAdapter);
+
 
         setupController();
     }
@@ -251,8 +239,19 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         return super.onOptionsItemSelected(item);
     }
 
+    public void setListVisible(boolean visible) {
+        if(visible) {
+            loadingView.setVisibility(View.GONE);
+            mainLayout.setVisibility(View.VISIBLE);
+        } else {
+            mainLayout.setVisibility(View.INVISIBLE);
+            loadingView.setVisibility(View.VISIBLE);
+        }
+    }
+
     //retrieve song info
     public void getSongList() {
+
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
@@ -497,6 +496,54 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
             if (cursor != null) {
                 cursor.close();
             }
+        }
+    }
+
+    public void setupSongList() {
+        mSongAdapter = new SongAdapter(songList, this);
+        songView.setAdapter(mSongAdapter);
+    }
+
+    private class LoadSongsTask extends AsyncTask<Void, Void, Long> {
+        protected void onPreExecute() {
+            setListVisible(false);
+        }
+
+        protected Long doInBackground(Void... params) {
+            getSongList();
+            return 1L;
+        }
+
+        protected void onProgressUpdate(Void... progress) {
+            //setProgressPercent(progress[0]);
+        }
+
+        protected void onPostExecute(Long result) {
+            Collections.sort(songList, new Comparator<Song>() {
+                @Override
+                public int compare(Song a, Song b) {
+                    // a > b, return +
+                    // b > a, return -
+                    // a = b, return comparison of artists
+                    if(a.getBpm() < 0 && b.getBpm() < 0) {
+                        //return equal
+                        //return 0;
+                        return a.getArtist().compareTo(b.getArtist());
+                    } else if(a.getBpm() < 0) {
+                        //return b
+                        return 1;
+                    } else if(b.getBpm() < 0) {
+                        //return a
+                        return -1;
+                    } else if(a.getBpm() == b.getBpm()) {
+                        return a.getArtist().compareTo(b.getArtist());
+                    }
+                    return a.getBpm() - b.getBpm();
+                }
+            });
+            setupSongList();
+            setListVisible(true);
+            //showDialog("Downloaded " + result + " bytes");
         }
     }
 }
